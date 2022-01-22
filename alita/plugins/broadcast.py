@@ -28,14 +28,14 @@ async def all_chat_for_br(client: CodeXBotz, message: Message):
 
 
 @Alita.on_message(command('total', sudo_cmd=True))
-async def get_users(client: CodeXBotz, message: Message):
+async def get_users(client: Alita, message: Message):
     msg = await client.send_message(chat_id=message.chat.id, text="Counting Users....")
-    total_users = await db.total_users_count()
+    total_users = db.total_users_count()
     await msg.edit(text=f"Total user/chat(s) {total_users}")
 
 
-@CodeXBotz.on_message(command('broadcast', sudo_cmd=True))
-async def broadcast(client: CodeXBotz, message: Message):
+@Alita.on_message(command('broadcast', sudo_cmd=True))
+async def broadcast(client: Alita, message: Message):
     reply_markup = ReplyKeyboardMarkup(
         keyboard=[[KeyboardButton("Cancel"), KeyboardButton("Confirm")]],
         resize_keyboard=True,
@@ -59,7 +59,7 @@ async def broadcast(client: CodeXBotz, message: Message):
         return
     await client.send_message(chat_id=message.chat.id, text="Sending Broadcast...",
                               reply_markup=ReplyKeyboardRemove())
-    all_users = await db.get_all_users()
+    all_users = db.get_all_chats_from_db()
 
     while True:
         broadcast_id = ''.join([random.choice(string.ascii_letters) for i in range(3)])
@@ -67,7 +67,7 @@ async def broadcast(client: CodeXBotz, message: Message):
             break
 
     start_time = time.time()
-    total_users = await db.total_users_count()
+    total_users = db.total_users_count()
     done = 0
     failed = 0
     success = 0
@@ -82,7 +82,7 @@ async def broadcast(client: CodeXBotz, message: Message):
         for user in all_users:
 
             sts, msg = await send_msg(
-                user_id=int(user['id']),
+                user_id=int(user),
                 message=response
             )
             if msg is not None:

@@ -22,6 +22,7 @@ from time import gmtime, strftime, time
 
 from pyrogram import Client, __version__
 from pyrogram.raw.all import layer
+from pyromod import listen
 
 from alita import (
     API_HASH,

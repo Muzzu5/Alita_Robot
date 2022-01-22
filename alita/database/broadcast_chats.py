@@ -17,9 +17,10 @@
 
 
 from threading import RLock
-
+from pyrogram.errors import FloodWait, InputUserDeactivated, UserIsBlocked, PeerIdInvalid
+import asyncio
+import traceback
 from alita.database import MongoDB
-from alita.database.chats_db import Chats
 
 INSERTION_LOCK = RLock()
 BROADCAST_CHATS = []
@@ -59,6 +60,14 @@ class Broadcastlist(MongoDB):
             except Exception:
                 all_chats = self.find_all()
                 return [chat["_id"] for chat in all_chats]
+
+    def total_users_count(self):
+        count = len(list(self.find_all({})))
+        return count
+
+    def get_all_chats_from_db(self):
+        all_chats = self.find_all()
+        return [chat["_id"] for chat in all_chats]
 
     def get_from_db(self):
         return self.find_all()
