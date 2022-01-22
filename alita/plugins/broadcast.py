@@ -18,7 +18,7 @@ db = Broadcastlist()
 broadcast_ids = {}
 
 @Alita.on_message(group=10)
-async def all_chat_for_br(client: CodeXBotz, message: Message):
+async def all_chat_for_br(client: Alita, message: Message):
     if message.sender_chat:
         chat_id = message.sender_chat.id
     else:
